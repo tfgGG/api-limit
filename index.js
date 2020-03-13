@@ -5,7 +5,10 @@ const https = require('https');
 const port = 3000
 const {sequelize} = require('./model')
 const bodyParser = require('body-parser')
+const middleware =  require('./middleware/LimitMiddleware')
+
 app.use(bodyParser.json())
+app.use(middleware.testmiddleware);
 
 require("./api")(app)
 

@@ -4,7 +4,11 @@ module.exports = {
 
     async index(req,res){
         const ques = await Form.findAll()
-        res.send(ques)
+        
+        if(ques.length>1)
+            res.status(429).send({'error': "Too many Request"})
+        else
+            res.send(ques)
     },
     async add(req,res){
         console.log(req.body)
