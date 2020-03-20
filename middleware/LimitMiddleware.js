@@ -13,12 +13,12 @@ module.exports = {
         else
             ip  = req.getHeader("X-Forwarded-For").toString();
 
-        console.log(ip);
+
         client.hgetall(ip.toString(),(err,data)=>{
          
             if(data == null){
-                console.log("inside NUll")
-                client.hset(ip.toString(),"time", Math.floor(new Date()/1000),redis.print());
+                console.log("Created ip:"+ip +" "+  new Date().toUTCString());
+                client.hset(ip.toString(),"time", Date.now(),redis.print());
                 client.hset(ip.toString(),"count", 1 ,redis.print());
                 client.expire(ip.toString(),TIME_LIMIT);
                 res.setHeader("X-RateLimit-Limit", MAX_REQEST - 1 );
@@ -27,7 +27,7 @@ module.exports = {
                 res.setHeader("X-RateLimit-Limit", MAX_REQEST-data['count']-1)
                 client.hincrby(ip.toString(),"count",1,redis.print());
             }else{
-                res.setHeader('X-RateLimit-Reset',data['time']);
+                res.setHeader('X-RateLimit-Reset', new Date(parseInt(data['time'])+ TIME_LIMIT*1000).toUTCString() );
             }
             console.log(data);
         })
