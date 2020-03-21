@@ -12,5 +12,8 @@ module.exports  = {
     },
     authencation:{
         jwtSecret : process.env.JWT_SECRET || 'secret' 
+    },
+    cache:{
+        database: process.env.REDIS_URL || 3000
     }
 }

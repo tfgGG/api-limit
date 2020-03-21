@@ -8,18 +8,23 @@ const bodyParser = require('body-parser')
 const middleware =  require('./middleware/LimitMiddleware')
 const jwt = require('jsonwebtoken')
 const redis = require("redis");
-const client = redis.createClient();
+var client = null;
 
+if(process.env.REDIS_URL != null)
+  client = redis.createClient(process.env.REDIS_URL || 3000)
+else
+  client =  redis.createClient();
+
+client.on('connect', function() {
+    console.log('Redis connected');
+    client.flushall();
+});
 
 app.use(bodyParser.json())
 app.use(middleware.testmiddleware);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-client.on('connect', function() {
-  console.log('Redis connected');
-  client.flushall();
-});
 
 require("./api")(app)
 
@@ -37,3 +42,5 @@ sequelize.sync({force: false})
     .then(()=>{
         console.log("Server start working")
 })
+
+module.exports = client
