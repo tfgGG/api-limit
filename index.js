@@ -6,6 +6,7 @@ const port = 3000;
 const {sequelize} = require('./model')
 const bodyParser = require('body-parser')
 const middleware =  require('./middleware/LimitMiddleware')
+const jwt = require('jsonwebtoken')
 const redis = require("redis");
 const client = redis.createClient();
 
