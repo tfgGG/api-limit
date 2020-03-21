@@ -10,10 +10,9 @@ const jwt = require('jsonwebtoken')
 const redis = require("redis");
 var client = null;
 
-if(process.env.REDIS_URL)
-  client = redis.createClient(process.env.REDIS_URL)
-else
-  client =  redis.createClient();
+console.log(process.env.REDIS_URL)
+client = redis.createClient(process.env.REDIS_URL)
+
 
 client.on('connect', function() {
     console.log('Redis connected');
