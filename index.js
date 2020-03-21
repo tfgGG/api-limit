@@ -11,7 +11,7 @@ const redis = require("redis");
 var client = null;
 
 if(process.env.REDIS_URL != null)
-  client = redis.createClient(process.env.REDIS_URL || 3000)
+  client = redis.createClient(process.env.REDIS_URL)
 else
   client =  redis.createClient();
 
@@ -42,5 +42,3 @@ sequelize.sync({force: false})
     .then(()=>{
         console.log("Server start working")
 })
-
-module.exports = client
