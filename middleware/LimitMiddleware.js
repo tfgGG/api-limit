@@ -1,7 +1,7 @@
 
 const MAX_REQEST = 10;
 const TIME_LIMIT = 60; 
-const client;
+const client = null;
 module.exports = {
     async testmiddleware(req,res,next){
         console.log("This is a middleware")
