@@ -1,8 +1,7 @@
 
 const MAX_REQEST = 10;
 const TIME_LIMIT = 60; 
-const redis = require("redis");
-const client = new redis.RedisClient();
+const client;
 module.exports = {
     async testmiddleware(req,res,next){
         console.log("This is a middleware")
