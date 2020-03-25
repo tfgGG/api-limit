@@ -1,16 +1,19 @@
 
 const MAX_REQEST = 10;
 const TIME_LIMIT = 60; 
-const client = null;
+const {client} = require('../model')
+const redis = require('redis');
+
 module.exports = {
-    async testmiddleware(req,res,next){
-        console.log("This is a middleware")
+    testmiddleware(req,res,next){
+        console.log("This is a middleware");
+        console.log(client);
         var ip = "";
         if(req.header("X-Forwarded-For") == null)
             ip =  req.connection.remoteAddress
         else
-            ip  = req.getHeader("X-Forwarded-For").toString();
-
+            ip  = req.header("X-Forwarded-For").toString();
+        
         client.hgetall(ip.toString(),(err,data)=>{
          
             if(data == null){
