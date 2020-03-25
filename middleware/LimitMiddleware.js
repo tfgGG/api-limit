@@ -7,7 +7,6 @@ const redis = require('redis');
 module.exports = {
     testmiddleware(req,res,next){
         console.log("This is a middleware");
-        console.log(client);
         var ip = "";
         if(req.header("X-Forwarded-For") == null)
             ip =  req.connection.remoteAddress
@@ -30,7 +29,8 @@ module.exports = {
                 res.setHeader('X-RateLimit-Reset', new Date(parseInt(data['time'])+ TIME_LIMIT*1000).toUTCString() );
             }
             console.log(data);
+            next();
         })
-        next();
+        
     }
 }
