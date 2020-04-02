@@ -21,15 +21,18 @@ module.exports = {
                 client.hset(ip.toString(),"count", 1 ,redis.print());
                 client.expire(ip.toString(),TIME_LIMIT);
                 res.setHeader("X-RateLimit-Limit", MAX_REQEST - 1 );
+                next();
             }
             else if(data['count'] < 10){
                 res.setHeader("X-RateLimit-Limit", MAX_REQEST-data['count']-1)
                 client.hincrby(ip.toString(),"count",1,redis.print());
+                next();
             }else{
                 res.setHeader('X-RateLimit-Reset', new Date(parseInt(data['time'])+ TIME_LIMIT*1000).toUTCString() );
+                res.status(429).send({'error': "Too many Request"})
             }
             console.log(data);
-            next();
+            
         })
         
     }
