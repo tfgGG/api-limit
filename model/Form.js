@@ -8,11 +8,6 @@ module.exports = (sequelize,DataTypes)=> {
         name:DataTypes.STRING,
         answer:DataTypes.INTEGER,
         discription: DataTypes.STRING
-    },{
-        hooks:{
-            //beforeCreate:hashPass,
-            //beforeUpdate:hashPass,
-        }
     })
     return Form
 }

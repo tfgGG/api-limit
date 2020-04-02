@@ -35,7 +35,7 @@ sequelize
 });
 
 
-sequelize.sync({force: false})
+sequelize.sync({force: true})
     .then(()=>{
         console.log("Server start working")
 })

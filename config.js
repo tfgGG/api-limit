@@ -15,5 +15,8 @@ module.exports  = {
     },
     cache:{
         database: process.env.REDIS_URL
+    },
+    secret:{
+         jwtsecret: "thisisasecret"
     }
 }
