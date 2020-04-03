@@ -6,13 +6,10 @@ const port = 3000;
 const {sequelize} = require('./model')
 const {client} = require('./model')
 const bodyParser = require('body-parser')
-const middleware =  require('./middleware/LimitMiddleware')
-const jwt = require('jsonwebtoken')
-
-
+const {testmiddleware,authmiddleware}=  require('./middleware/Middleware')
 
 app.use(bodyParser.json())
-app.use(middleware.testmiddleware);
+app.use([testmiddleware,authmiddleware]);
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
 

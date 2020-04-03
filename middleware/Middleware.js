@@ -3,6 +3,8 @@ const MAX_REQEST = 10;
 const TIME_LIMIT = 60; 
 const {client} = require('../model')
 const redis = require('redis');
+const jwt = require('jsonwebtoken');
+const {jwtsecret} =require('../config').secret;
 
 module.exports = {
     testmiddleware(req,res,next){
@@ -34,6 +36,29 @@ module.exports = {
             console.log(data);
             
         })
+        
+    },
+    authmiddleware(req,res,next){
+        
+        var token = req.headers['x-access-token'] || req.headers['token']; 
+        console.log(req.originalUrl,req.method)
+
+        if(req.method==="POST" && req.originalUrl==="/user"){
+            console.log(req.originalUrl,req.method)
+            next();
+        }
+        else if(token){
+            jwt.verify(token, jwtsecret, (err, decoded) => {
+                if (err) {
+                  res.send({message: 'Token is not valid'});
+                } else {
+                  req.decoded = decoded;
+                  next();
+                }
+            });
+        }
+        else
+            res.send({ message: 'Auth token is not supplied'})
         
     }
 }

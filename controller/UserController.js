@@ -18,7 +18,7 @@ module.exports = {
        if(!user){
          const createuser = await User.create(req.body).catch(req.body)
          res.send({
-             id: createuser.userid,
+             id: createuser.userId,
              email: createuser.email,
              message: "Register Success"
          })
@@ -27,7 +27,7 @@ module.exports = {
             const token = jwt.sign(user.email,jwtsecret)
             res.send({
                 email: user.email,
-                token: token, 
+                token: token,
                 message: "Login Success"
             })
        }else{
