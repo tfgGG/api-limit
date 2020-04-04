@@ -5,9 +5,17 @@ const {jwtsecret} = require('../config').secret;
 const bycrpt = require('bcrypt');
 
 module.exports = {
-
+    
     async me(req,res){
-        
+        const user = await User.findOne({where: {userId: req.params.id}})
+        if(user && req.decoded == user.email)
+            res.send(user)
+        else{
+            res.status(400).send({
+                error: "Authencation Error",
+                message: 'Authentication failed! Wrong token '
+            });
+        }
     },
     async login(req,res){
 
@@ -23,19 +31,38 @@ module.exports = {
              message: "Register Success"
          })
        }
-       else if(user.email == email && bycrpt.compare(user.password,password)){
+       const isvalid = await user.comparePassword(password,user.password).catch((err)=>{})
+       if(isvalid ){
             const token = jwt.sign(user.email,jwtsecret)
             res.send({
+                id: user.userId,
                 email: user.email,
                 token: token,
                 message: "Login Success"
             })
        }else{
-           res.send(400).json({
+           res.status(400).send({
             error: "Authencation Error",
             message: 'Authentication failed! Please check the request'
           });
        }
-
+    },
+    async changePass(req,res){
+        
+        if(Object.keys(req.body).length != 1 || Object.keys(req.body)[0]!= 'password'){
+            res.status(400).send({
+                message: 'Wrong Field'
+            })
+        }
+        
+        const user = await User.findOne({where:{userId:req.params.id}});
+        if(!user)
+            res.status(400).send({ message: 'Data not Exist'})
+        else{
+            user.setDataValue('password',req.body.password);
+            await user.save();
+            res.send({message: "Password has been modified"});
+        } 
+        
     }
 }

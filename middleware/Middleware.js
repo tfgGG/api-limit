@@ -8,7 +8,6 @@ const {jwtsecret} =require('../config').secret;
 
 module.exports = {
     testmiddleware(req,res,next){
-        console.log("This is a middleware");
         var ip = "";
         if(req.header("X-Forwarded-For") == null)
             ip =  req.connection.remoteAddress
@@ -43,10 +42,9 @@ module.exports = {
         var token = req.headers['x-access-token'] || req.headers['token']; 
         console.log(req.originalUrl,req.method)
 
-        if(req.method==="POST" && req.originalUrl==="/user"){
-            console.log(req.originalUrl,req.method)
+        if(req.method==="POST" && req.originalUrl==="/user")
             next();
-        }
+        
         else if(token){
             jwt.verify(token, jwtsecret, (err, decoded) => {
                 if (err) {

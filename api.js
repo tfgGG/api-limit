@@ -8,5 +8,6 @@ module.exports = (app)=> {
     app.get('/form', FormController.index)
 
     app.post('/user',UserController.login)
-
+    app.patch('/user/:id',UserController.changePass)
+    app.get('/user/:id', UserController.me)
 }

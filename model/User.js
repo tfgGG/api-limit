@@ -8,10 +8,10 @@ function hashPass(user,password){
     }
     
     return bcrypt.genSalt(SALT_FACTOR)
-                .then(salt => bcrypt.hash(user.password,salt,null))
-                .then(hash => {
-                user.setDataValue('password',hash)
-    });
+          .then(salt => bcrypt.hash(user.password,salt,null))
+          .then(hash => {
+            user.setDataValue('password',hash)
+        });
 }
 
 
@@ -19,8 +19,8 @@ function hashPass(user,password){
 module.exports = (sequelize,DataTypes)=> {
     const User = sequelize.define('User',{
         userId:{
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey: true
         },
         email:{
@@ -36,5 +36,8 @@ module.exports = (sequelize,DataTypes)=> {
             beforeUpdate:hashPass,
         }
     })
+    User.prototype.comparePassword =  (password,hashpassword)=>{
+        return bcrypt.compare(password, hashpassword)
+    }
     return User
 } 
