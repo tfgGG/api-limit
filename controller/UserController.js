@@ -58,11 +58,16 @@ module.exports = {
         const user = await User.findOne({where:{userId:req.params.id}});
         if(!user)
             res.status(400).send({ message: 'Data not Exist'})
-        else{
+        else if(user && req.decoded == user.email){
             user.setDataValue('password',req.body.password);
             await user.save();
             res.send({message: "Password has been modified"});
-        } 
+        }else{
+            res.status(400).send({
+                error: "Authencation Error",
+                message: 'Authentication failed! Wrong token '
+            });
+        }
         
     }
 }
