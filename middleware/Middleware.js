@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const {jwtsecret} =require('../config').secret;
 
 module.exports = {
-    testmiddleware(req,res,next){
+    limitmiddleware(req,res,next){
         var ip = "";
         if(req.header("X-Forwarded-For") == null)
             ip =  req.connection.remoteAddress
@@ -30,7 +30,7 @@ module.exports = {
                 next();
             }else{
                 res.setHeader('X-RateLimit-Reset', new Date(parseInt(data['time'])+ TIME_LIMIT*1000).toUTCString() );
-                res.status(429).send({'error': "Too many Request"})
+                res.status(429).send({error: "Too many Request"})
             }
             console.log(data);
             
@@ -42,13 +42,13 @@ module.exports = {
         var token = req.headers['x-access-token'] || req.headers['token']; 
         console.log(req.originalUrl,req.method)
 
-        if(req.method==="POST" && req.originalUrl==="/user")
+        if(req.method==="POST" && req.originalUrl==="/user" || req.originalUrl==="/")
             next();
         
         else if(token){
             jwt.verify(token, jwtsecret, (err, decoded) => {
                 if (err) {
-                  res.send({message: 'Token is not valid'});
+                  res.send({error: 'Token is not valid'});
                 } else {
                   req.decoded = decoded;
                   next();
@@ -56,7 +56,7 @@ module.exports = {
             });
         }
         else
-            res.send({ message: 'Auth token is not supplied'})
+            res.send({ error: 'Token is not supplied'})
         
     }
 }

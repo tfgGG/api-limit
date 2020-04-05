@@ -4,7 +4,7 @@ module.exports = {
 
     async index(req,res){
         const ques = await Form.findAll()
-        res.send(ques)
+        res.send({data:ques})
     },
     async add(req,res){
         console.log(req.body)

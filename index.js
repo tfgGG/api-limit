@@ -6,10 +6,10 @@ const port = 3000;
 const {sequelize} = require('./model')
 const {client} = require('./model')
 const bodyParser = require('body-parser')
-const {testmiddleware,authmiddleware}=  require('./middleware/Middleware')
+const {limitmiddleware,authmiddleware}=  require('./middleware/Middleware')
 
 app.use(bodyParser.json())
-app.use([testmiddleware,authmiddleware]);
+app.use([limitmiddleware,authmiddleware]);
 
 app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`))
 
@@ -28,11 +28,11 @@ sequelize
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
-    console.error('Unable to connect to the database:', err);
+    console.error('Unable to connect to the Redis Database:', err);
 });
 
 
 sequelize.sync({force: true})
     .then(()=>{
-        console.log("Server start working")
+        console.log("DB Server start working")
 })

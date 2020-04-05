@@ -41,17 +41,14 @@ module.exports = {
                 message: "Login Success"
             })
        }else{
-           res.status(400).send({
-            error: "Authencation Error",
-            message: 'Authentication failed! Please check the request'
-          });
+           res.status(400).send({error: 'Authentication failed! Please check the request'});
        }
     },
     async changePass(req,res){
         
         if(Object.keys(req.body).length != 1 || Object.keys(req.body)[0]!= 'password'){
             res.status(400).send({
-                message: 'Wrong Field'
+                error: 'Request body has wrong field data'
             })
         }
         
@@ -61,13 +58,10 @@ module.exports = {
         else if(user && req.decoded == user.email){
             user.setDataValue('password',req.body.password);
             await user.save();
-            res.send({message: "Password has been modified"});
+            res.send({message: "Password has been modified successfully"});
         }else{
-            res.status(400).send({
-                error: "Authencation Error",
-                message: 'Authentication failed! Wrong token '
-            });
+            res.status(400).send({error: "Authencation Error! Wrong token"});
         }
-        
+    
     }
 }
