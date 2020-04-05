@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize')
+const redis = require("redis");
 const config = require('../config'); 
 const db ={};
 
-const sequelize = null;
 if(process.env.DATABASE_URL != null)
 {
     console.log("Using Postgres")
@@ -27,6 +27,14 @@ if(process.env.DATABASE_URL != null)
         config.db.options
     )
 }
+
+if(process.env.REDIS_URL)
+  this.client = redis.createClient(process.env.REDIS_URL)
+else
+  this.client = redis.createClient()
+
+
+
 // Read all model file(except index.js) and load into sequelize
 fs.readdirSync(__dirname).filter( (file)=> file!=='index.js'&& file!=="question.json" && file!=="item.json")
 .forEach( (file)=>{
@@ -36,5 +44,6 @@ fs.readdirSync(__dirname).filter( (file)=> file!=='index.js'&& file!=="question.
 
 db.sequelize = this.sequelize
 db.Sequelize = Sequelize
+db.client = this.client
 
 module.exports = db
